@@ -32,41 +32,86 @@
             border-radius: 0.375rem; /* Slightly rounded corners */
             margin: 1rem; /* Add some margin */
             overflow: hidden; /* Prevent content overflow from container */
+            position: relative; /* For calculator positioning */
         }
         /* Header and Footer */
-        .header-bar, .footer-bar {
-            flex-shrink: 0; /* Prevent shrinking */
-            background-color: #006DAA; /* Updated background color */
-            color: white; /* Set default text color to white */
-            padding: 0.75rem 1.5rem; /* Padding */
+        .header-bar { /* Topmost bar */
+            flex-shrink: 0;
+            background-color: #005A8C; /* Slightly darker blue for top bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjusted padding */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20; /* Ensure it's above the secondary bar if overlapping */
+        }
+
+        .secondary-toolbar { /* New toolbar for calculator and flag */
+            flex-shrink: 0;
+            background-color: #007BBD; /* Lighter blue for secondary bar */
+            color: white;
+            padding: 0.5rem 1.5rem; /* Consistent padding */
+            display: flex;
+            justify-content: space-between; /* Align items */
+            align-items: center;
+            border-bottom: 1px solid #005A8C; /* Optional: a subtle separator */
+            z-index: 19;
+        }
+
+        /* Specific text colors within header/footer */
+        .header-bar span, .header-bar div, .secondary-toolbar span, .secondary-toolbar div {
+             color: white;
+        }
+        #timer {
+             background-color: rgba(255, 255, 255, 0.2); 
+             color: white;
+             font-weight: bold;
+             padding: 0.25rem 0.75rem; 
+             border-radius: 0.25rem; 
+        }
+        
+        /* Buttons in secondary toolbar */
+        .secondary-toolbar-button {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 0.3rem 0.7rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            margin-left: 0.5rem; /* Spacing between buttons */
+        }
+        .secondary-toolbar-button:hover:not(:disabled) {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+        .secondary-toolbar-button.active { /* For calculator button when active */
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+
+
+         /* Footer Button Styling */
+        .footer-bar {
+            flex-shrink: 0;
+            background-color: #005A8C; /* Match top bar color */
+            color: white;
+            padding: 0.75rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        /* Specific text colors within header/footer */
-        .header-bar span, .header-bar div {
-             color: white;
-        }
-        #timer {
-             background-color: rgba(255, 255, 255, 0.2); /* Lighter background for timer */
-             color: white;
-             font-weight: bold;
-             padding: 0.25rem 0.75rem; /* Adjusted padding */
-             border-radius: 0.25rem; /* Slightly rounded */
-        }
-         /* Footer Button Styling */
         .footer-bar button {
             background-color: transparent;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle white border */
-            padding: 0.4rem 0.8rem; /* Adjust padding */
-            font-size: 0.8rem; /* Adjust font size */
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            padding: 0.4rem 0.8rem; 
+            font-size: 0.8rem; 
             border-radius: 0.375rem;
              transition: background-color 0.2s ease, border-color 0.2s ease;
         }
         .footer-bar button:hover:not(:disabled) {
-            background-color: rgba(255, 255, 255, 0.15); /* Slight white background on hover */
+            background-color: rgba(255, 255, 255, 0.15); 
             border-color: white;
         }
          .footer-bar button:disabled {
@@ -74,100 +119,69 @@
              cursor: not-allowed;
              border-color: rgba(255, 255, 255, 0.3);
          }
-         /* Keep primary button distinct */
          .footer-bar button#next-button {
-             background-color: #ffffff; /* White background */
-             color: #006DAA; /* Blue text */
+             background-color: #ffffff; 
+             color: #006DAA; 
              border: 1px solid white;
              font-weight: 500;
          }
          .footer-bar button#next-button:hover:not(:disabled) {
-             background-color: #f0f0f0; /* Slightly off-white on hover */
+             background-color: #f0f0f0; 
          }
-         /* Flag button specific style */
-         #flag-button {
-             background-color: transparent;
-             border: 1px solid white;
-             color: white;
-             transition: background-color 0.2s ease, color 0.2s ease; /* Add transition */
-         }
-         #flag-button:hover {
-             background-color: white;
-             color: #006DAA;
-         }
-         /* Style for when a question IS flagged */
-          #flag-button.flagged {
-             background-color: #facc15; /* Yellow-400 */
+         #flag-button.flagged {
+             background-color: #facc15; 
              border-color: #facc15;
-             color: #422006; /* Dark brown text for contrast */
+             color: #422006; 
           }
           #flag-button.flagged:hover {
-             background-color: #f59e0b; /* Amber-500 */
+             background-color: #f59e0b; 
              border-color: #f59e0b;
           }
 
-
         /* Main Content Area */
         .main-content-area {
-            flex-grow: 1; /* Take remaining vertical space */
+            flex-grow: 1; 
             display: flex;
-            overflow: hidden; /* Prevent content overflow issues */
-            padding: 1rem; /* Padding around passage/question */
-            gap: 1rem; /* Gap between passage and question */
+            overflow: hidden; 
+            padding: 1rem; 
+            gap: 1rem; 
         }
-        /* Passage and Question Columns */
         .passage-column {
-            flex: 0 0 60%; /* Set passage width to 60% */
-            overflow-y: auto; /* Allow vertical scrolling */
+            flex: 0 0 60%; 
+            overflow-y: auto; 
             padding: 1rem;
             border: 1px solid #e5e7eb;
             border-radius: 0.375rem;
-            background-color: #f9fafb; /* Slight background tint */
-            height: 100%; /* Fill available height */
+            background-color: #f9fafb; 
+            height: 100%; 
         }
         .question-column {
-             flex: 0 0 40%; /* Set question width to 40% */
-             overflow-y: auto; /* Allow vertical scrolling */
+             flex: 0 0 40%; 
+             overflow-y: auto; 
              padding: 1rem;
              border: 1px solid #e5e7eb;
              border-radius: 0.375rem;
-             background-color: #f9fafb; /* Slight background tint */
-             height: 100%; /* Fill available height */
-             position: relative; /* Needed for absolute positioning if used later */
+             background-color: #f9fafb; 
+             height: 100%; 
+             position: relative; 
         }
 
-        /* Style for selected answer */
         .selected-answer {
-            background-color: #bfdbfe !important; /* Tailwind blue-200 - use !important to override hover */
-            border-color: #3b82f6 !important; /* Tailwind blue-500 */
+            background-color: #bfdbfe !important; 
+            border-color: #3b82f6 !important; 
         }
-        /* Style for navigator buttons */
-        .nav-answered {
-            background-color: #a7f3d0; /* Tailwind emerald-200 */
-        }
-        .nav-current {
-            border: 2px solid #3b82f6 !important; /* Tailwind blue-500 */
-            font-weight: bold;
-        }
-        /* Style for flagged questions in navigator/review */
-        .nav-flagged, .review-flagged {
-            border: 2px solid #f59e0b !important; /* Amber-500 border */
-            position: relative; /* Needed for potential icon positioning */
-        }
-        /* Modal Styles */
+        .nav-answered { background-color: #a7f3d0; }
+        .nav-current { border: 2px solid #3b82f6 !important; font-weight: bold; }
+        .nav-flagged, .review-flagged { border: 2px solid #f59e0b !important; position: relative; }
+        
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; }
         .modal.flex { display: flex; }
 
-        /* General Button Styling (outside footer) */
         button, .button {
             transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-            border-radius: 0.375rem;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            cursor: pointer;
+            border-radius: 0.375rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); cursor: pointer;
         }
         button:active, .button:active { transform: scale(0.98); }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -178,220 +192,168 @@
         .secondary-button:hover:not(:disabled) { background-color: #f9fafb; }
         .danger-button { background-color: #ef4444; color: white; border: 1px solid transparent; }
         .danger-button:hover:not(:disabled) { background-color: #dc2626; }
-        .subtle-button { background-color: #f3f4f6; color: #374151; border: 1px solid transparent; }
-        .subtle-button:hover:not(:disabled) { background-color: #e5e7eb; }
-
-
-        /* Styling for radio button labels to act as buttons */
+        
         .option-label {
-            display: block;
-            padding: 0.75rem 1rem;
-            border: 1px solid #d1d5db; /* Tailwind gray-300 */
-            border-radius: 0.375rem;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
+            display: block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; 
+            border-radius: 0.375rem; margin-bottom: 0.5rem; cursor: pointer;
             transition: background-color 0.2s ease, border-color 0.2s ease;
-            background-color: #ffffff; /* White background for options */
+            background-color: #ffffff; 
         }
-        .option-label:hover:not(.selected-answer) { /* Prevent hover style if selected */
-            background-color: #f3f4f6; /* Tailwind gray-100 */
-            border-color: #a5b4fc; /* Indigo-300 on hover */
-        }
-        /* Hide actual radio buttons */
+        .option-label:hover:not(.selected-answer) { background-color: #f3f4f6; border-color: #a5b4fc; }
         input[type="radio"] { display: none; }
 
-        /* --- Result Grid Styling --- */
         #results-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Responsive grid */
-            gap: 1rem; /* Gap between items */
-            padding-top: 0.5rem; /* Space above the grid */
-            max-width: 500px; /* Max width for the grid itself */
-            margin-left: auto;  /* Center the grid */
-            margin-right: auto; /* Center the grid */
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); 
+            gap: 1rem; padding-top: 0.5rem; max-width: 500px; margin-left: auto; margin-right: auto;
         }
-
-        .result-summary-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
+        .result-summary-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
         .result-summary-box {
-            width: 70px; /* Width of the box */
-            height: 70px; /* Height of the box */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.375rem; /* Rounded corners */
-            font-weight: 600;
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            border-radius: 0.375rem; font-weight: 600; color: white; cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result-summary-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .correct-box { background-color: #22c55e; border: 2px solid #16a34a; }
+        .incorrect-box { background-color: #ef4444; border: 2px solid #dc2626; }
+        .not-answered-box { background-color: #9ca3af; border: 2px solid #6b7280; }
+        .time-display-in-box { font-size: 1rem; }
+        .question-number-label { margin-top: 0.5rem; font-size: 0.875rem; color: #4b5563; font-weight: 500; }
+        
+        .explanation-box {
+             background-color: #fef3c7; border: 1px solid #fcd34d; padding: 0.5rem 0.75rem; 
+             margin-top: 0.75rem; border-radius: 0.375rem; font-size: 0.875rem; color: #78350f; 
+        }
+        .review-grid-button {
+             padding: 0.5rem 0.25rem; border: 1px solid #d1d5db; border-radius: 0.375rem;
+             text-align: center; transition: background-color 0.2s ease, border-color 0.2s ease;
+             font-size: 0.875rem; line-height: 1.25rem; cursor: pointer;
+        }
+        .review-grid-button-answered { background-color: #dcfce7; border-color: #86efac; color: #15803d; }
+        .review-grid-button-unanswered { background-color: #f3f4f6; border-color: #d1d5db; color: #4b5563; }
+        .review-grid-button:hover { filter: brightness(95%); }
+
+        /* Calculator Styles */
+        #calculator-ui {
+            display: none; 
+            position: absolute;
+            top: 100px; 
+            left: 50%;
+            width: 225px; /* Reduced width by ~20% from 280px */
+            background-color: #007BBD; /* Lighter blue, matching secondary toolbar */
+            border: 2px solid #005A8C; /* Border to complement the blue */
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            padding: 12px; /* Adjusted padding */
+            z-index: 1000; 
+            cursor: grab; /* Indicate it's draggable */
+        }
+        #calculator-ui.visible { display: block; }
+        .calculator-header {
+            display: flex; justify-content: space-between; align-items: center;
+            color: white; margin-bottom: 8px; font-size: 0.8rem; padding: 0 3px;
+        }
+        .calculator-header .title { font-weight: 600; }
+        .calculator-header .close-calc-btn {
+            background: none; border: none; color: white; font-size: 1.1rem; cursor: pointer;
+        }
+        .calculator-decorative-text {
+            color: rgba(255, 255, 255, 0.7); /* Lighter white for decorative text */
+            font-size: 0.6rem;
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        #calc-display-container {
+            background-color: #E2E8F0; border: 2px inset #A0AEC0; 
+            border-radius: 4px; padding: 4px 6px; /* Adjusted padding */
+            margin-bottom: 12px; text-align: right; min-height: 36px; /* Adjusted height */
+            display: flex; align-items: center; justify-content: flex-end;
+        }
+        #calc-display {
+            font-family: 'Courier New', Courier, monospace; font-size: 1.6rem; /* Adjusted font size */
+            color: #2D3748; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+        }
+        .calc-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px; /* Adjusted gap */
+        }
+        .calc-button {
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 4px;
+            padding: 10px 0; /* Adjusted padding */
+            font-size: 0.9rem; /* Adjusted font size */
+            font-weight: 500; cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .calc-button:active { transform: scale(0.95); }
+
+        /* Number buttons (0-9, .) */
+        .calc-button-num {
+            background-color: #FFFFFF; /* White background */
+            color: #1A202C; /* Dark text (Tailwind gray-800) */
+        }
+        .calc-button-num:hover { background-color: #F7FAFC; /* Tailwind gray-100 */ }
+
+        /* Function and Operator buttons (Red background, white text) */
+        .calc-button-red {
+            background-color: #C53030; /* Red (Tailwind red-700) */
             color: white;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-color: #9B2C2C; /* Tailwind red-800 */
         }
-        .result-summary-box:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-
-        .correct-box {
-            background-color: #22c55e; /* Tailwind green-500 */
-            border: 2px solid #16a34a; /* Tailwind green-600 */
-        }
-        .incorrect-box {
-            background-color: #ef4444; /* Tailwind red-500 */
-            border: 2px solid #dc2626; /* Tailwind red-600 */
-        }
-        .not-answered-box {
-            background-color: #9ca3af; /* Tailwind gray-400 */
-            border: 2px solid #6b7280; /* Tailwind gray-500 */
+        .calc-button-red:hover { background-color: #E53E3E; /* Tailwind red-600 */ }
+        
+        .calc-button.equals { /* Specific for equals if needed, otherwise use calc-button-red */
+            grid-column: span 2; /* Make equals button wider */
         }
 
 
-        .time-display-in-box {
-            font-size: 1rem; /* Size of the time text */
-        }
-
-        .question-number-label {
-            margin-top: 0.5rem; /* Space between box and number */
-            font-size: 0.875rem; /* text-sm */
-            color: #4b5563; /* Tailwind gray-600 */
-            font-weight: 500;
-        }
-        /* --- END Result Grid Styling --- */
-
-
-         /* Style for explanation box (used in results and review view) */
-         .explanation-box {
-             background-color: #fef3c7; /* Tailwind amber-100 */
-             border: 1px solid #fcd34d; /* Tailwind amber-300 */
-             padding: 0.5rem 0.75rem; /* p-2 equivalent */
-             margin-top: 0.75rem; /* mt-3 */
-             border-radius: 0.375rem; /* rounded-md */
-             font-size: 0.875rem; /* text-sm */
-             color: #78350f; /* Tailwind amber-900 */
-         }
-
-         /* Review Grid Button Styles */
-         .review-grid-button {
-             padding: 0.5rem 0.25rem; /* Adjust padding */
-             border: 1px solid #d1d5db; /* Default border */
-             border-radius: 0.375rem;
-             text-align: center;
-             transition: background-color 0.2s ease, border-color 0.2s ease;
-             font-size: 0.875rem;
-             line-height: 1.25rem;
-             cursor: pointer;
-         }
-         .review-grid-button-answered {
-             background-color: #dcfce7; /* Lighter green */
-             border-color: #86efac; /* Green border */
-             color: #15803d; /* Darker green text */
-         }
-         .review-grid-button-unanswered {
-             background-color: #f3f4f6; /* Light gray */
-             border-color: #d1d5db; /* Gray border */
-             color: #4b5563; /* Gray text */
-         }
-          .review-grid-button:hover {
-             filter: brightness(95%); /* Slightly darken on hover */
-          }
-
-
-        /* Responsive adjustments */
         @media (max-width: 768px) {
-            #app-container {
-                 height: auto; /* Allow height to adjust */
-                 margin: 0.5rem;
-            }
-            .main-content-area {
-                 flex-direction: column; /* Stack columns */
-                 padding: 0.5rem;
-                 gap: 0.5rem;
-            }
-            .passage-column, .question-column {
-                 flex-basis: auto;
-                 width: 100%; 
-                 height: auto; 
-                 max-height: 40vh; 
-                 padding: 0.75rem;
-            }
-            .header-bar, .footer-bar {
-                 padding: 0.5rem 1rem;
-            }
-            .header-bar span, .footer-bar button { 
-                 font-size: 0.8rem;
-            }
-            button, .button {
-                 padding: 0.4rem 0.8rem;
-            }
-             .footer-bar button {
-                 padding: 0.3rem 0.6rem;
-                 font-size: 0.75rem;
-             }
-            .grid-cols-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
+            #app-container { height: auto; margin: 0.5rem; }
+            .main-content-area { flex-direction: column; padding: 0.5rem; gap: 0.5rem; }
+            .passage-column, .question-column { flex-basis: auto; width: 100%; height: auto; max-height: 35vh; padding: 0.75rem; }
+            .header-bar, .secondary-toolbar, .footer-bar { padding: 0.5rem 1rem; }
+            .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.8rem; }
+            button, .button { padding: 0.4rem 0.8rem; }
+            .footer-bar button { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
             #review-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } 
             .review-grid-button { font-size: 0.8rem; }
-
-            #results-details-grid {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 0.75rem;
-            }
-            .result-summary-box {
-                width: 60px;
-                height: 60px;
-            }
-            .time-display-in-box {
-                font-size: 0.9rem;
-            }
+            #results-details-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 0.75rem; }
+            .result-summary-box { width: 60px; height: 60px; }
+            .time-display-in-box { font-size: 0.9rem; }
+            #calculator-ui { width: 210px; top: 90px; padding: 10px;} 
+            .calc-button { padding: 8px 0; font-size: 0.8rem;}
+            #calc-display { font-size: 1.4rem; }
         }
          @media (max-width: 480px) {
-             .grid-cols-5 { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
              #review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } 
-             .header-bar span, .footer-bar button { font-size: 0.75rem; }
-             button, .button {
-                 padding: 0.3rem 0.6rem;
-             }
-              .footer-bar button {
-                 padding: 0.25rem 0.5rem;
-                 font-size: 0.7rem;
-              }
+             .header-bar span, .footer-bar button, .secondary-toolbar-button { font-size: 0.75rem; }
+             button, .button { padding: 0.3rem 0.6rem; }
+             .footer-bar button { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
              .option-label { padding: 0.5rem 0.75rem; font-size: 0.8rem;}
              .review-grid-button { font-size: 0.75rem; }
-
-            #results-details-grid {
-                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); /* Adjust for smaller screens */
-                gap: 0.5rem;
-            }
-            .result-summary-box {
-                width: 50px;
-                height: 50px;
-            }
-            .time-display-in-box {
-                font-size: 0.8rem;
-            }
-            .question-number-label {
-                font-size: 0.8rem;
-            }
+             #results-details-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 0.5rem; }
+             .result-summary-box { width: 50px; height: 50px; }
+             .time-display-in-box { font-size: 0.8rem; }
+             .question-number-label { font-size: 0.8rem; }
+             #calculator-ui { width: 90%; max-width: 200px; top: 85px; padding: 8px; } 
+             .calc-button { padding: 7px 0; font-size: 0.75rem;}
+             #calc-display { font-size: 1.3rem; }
          }
-
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    </head>
+</head>
 <body>
-
     <div id="app-container">
 
         <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                     alt="MedwithPurpose Logo"
-                     class="mx-auto h-20 w-auto mb-4"
-                     onerror="this.style.display='none'; this.onerror=null;">
+                     alt="MedwithPurpose Logo" class="mx-auto h-20 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">UCAT Quantitative Reasoning Practice</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT QR section.</p>
                  <p class="text-sm text-gray-500 mt-4">
@@ -413,9 +375,7 @@
                 </div>
             </div>
             <div class="mt-8 text-center">
-                <button id="start-button" class="primary-button text-lg px-8 py-3">
-                    Start Exam
-                </button>
+                <button id="start-button" class="primary-button text-lg px-8 py-3">Begin timed set</button>
             </div>
         </div>
 
@@ -425,25 +385,24 @@
                 <div class="flex items-center space-x-4">
                     <div id="timer" class="text-base px-3 py-1 rounded-md">04:00</div>
                     <span class="text-sm">Question <span id="question-number-info">1</span> of 4</span>
-                    <button id="flag-button" class="text-sm font-medium border border-white rounded px-2 py-1 transition-colors duration-150">
-                         Flag for Review
-                    </button>
+                </div>
+            </div>
+            <div class="secondary-toolbar">
+                <div> <button id="calculator-toggle-button" class="secondary-toolbar-button">Calculator (Alt+C)</button>
+                </div>
+                <div> <button id="flag-button" class="secondary-toolbar-button">Flag for Review</button>
                 </div>
             </div>
 
             <div class="main-content-area">
                 <div class="passage-column">
                     <h3 class="text-lg font-semibold mb-2 sticky top-0 bg-gray-50 pb-1">Scenario <span id="passage-number">1</span></h3>
-                    <div id="passage-text" class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                        </div>
+                    <div id="passage-text" class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
                 </div>
-
                 <div class="question-column">
                     <h4 class="text-md font-semibold mb-3 sticky top-0 bg-gray-50 pb-1">Question <span id="question-number">1</span></h4>
-                    <p id="question-text" class="mb-4 text-gray-800">
-                        </p>
-                    <div id="options-container" class="space-y-2">
-                        </div>
+                    <p id="question-text" class="mb-4 text-gray-800"></p>
+                    <div id="options-container" class="space-y-2"></div>
                     <div id="review-explanation-container"></div>
                 </div>
             </div>
@@ -458,6 +417,48 @@
                  </div>
             </div>
         </div>
+        
+        <div id="calculator-ui">
+            <div class="calculator-header" id="calculator-drag-header">
+                <span class="title">Calculator</span>
+                <button class="close-calc-btn" id="close-calculator-button">&times;</button>
+            </div>
+            <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
+            <div id="calc-display-container">
+                <div id="calc-display">0</div>
+            </div>
+            <div class="calc-buttons-grid">
+                <button class="calc-button calc-button-red" data-calc-action="negate">+/-</button>
+                <button class="calc-button calc-button-red" data-calc-action="sqrt">√</button>
+                <button class="calc-button calc-button-red" data-calc-action="percent">%</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="/">÷</button>
+                
+                <button class="calc-button calc-button-red" data-calc-action="mrc">MRC</button>
+                <button class="calc-button calc-button-red" data-calc-action="m-">M-</button>
+                <button class="calc-button calc-button-red" data-calc-action="m+">M+</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="*">×</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="7">7</button>
+                <button class="calc-button calc-button-num" data-calc-value="8">8</button>
+                <button class="calc-button calc-button-num" data-calc-value="9">9</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="-">-</button>
+
+                <button class="calc-button calc-button-num" data-calc-value="4">4</button>
+                <button class="calc-button calc-button-num" data-calc-value="5">5</button>
+                <button class="calc-button calc-button-num" data-calc-value="6">6</button>
+                <button class="calc-button calc-button-red operator" data-calc-value="+">+</button>
+                
+                <button class="calc-button calc-button-num" data-calc-value="1">1</button>
+                <button class="calc-button calc-button-num" data-calc-value="2">2</button>
+                <button class="calc-button calc-button-num" data-calc-value="3">3</button>
+                <button class="calc-button calc-button-red equals" data-calc-action="equals">=</button>
+
+                <button class="calc-button calc-button-red" data-calc-action="clear">ON/C</button>
+                <button class="calc-button calc-button-num" data-calc-value="0">0</button>
+                <button class="calc-button calc-button-num" data-calc-value=".">.</button>
+            </div>
+        </div>
+
 
         <div id="review-screen" class="hidden p-6 md:p-8 flex flex-col items-center h-full overflow-y-auto">
              <div class="w-full max-w-3xl mb-4 flex justify-between items-center">
@@ -465,21 +466,16 @@
                  <button id="filter-flagged-button" class="secondary-button text-sm">Show Flagged Only</button>
              </div>
              <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
-            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md">
-                </div>
+            <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
             <div class="mt-auto pt-6">
-                <button id="end-exam-button" class="danger-button text-lg px-8 py-3">
-                    End Exam & See Results
-                </button>
+                <button id="end-exam-button" class="danger-button text-lg px-8 py-3">End Exam & See Results</button>
             </div>
         </div>
 
         <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
              <div class="text-center mb-6 flex-shrink-0">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                     alt="MedwithPurpose Logo"
-                     class="mx-auto h-16 w-auto mb-4"
-                     onerror="this.style.display='none'; this.onerror=null;">
+                     alt="MedwithPurpose Logo" class="mx-auto h-16 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
                  <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Exam Results</h2>
              </div>
             <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
@@ -488,8 +484,7 @@
             </div>
             <h3 class="text-xl font-semibold mb-2 flex-shrink-0">Detailed Results:</h3>
             <p class="text-sm text-gray-500 mb-4 flex-shrink-0">Click on a question box below to review it.</p>
-            <div id="results-details-grid" class="overflow-y-auto flex-grow">
-                </div>
+            <div id="results-details-grid" class="overflow-y-auto flex-grow"></div>
             <div class="mt-6 flex-shrink-0 border-t pt-4">
                  <div class="mb-4">
                     <label for="focus-rating" class="block text-md font-semibold text-gray-700 mb-1">My focus out of 5 (1 very low, 5 very high):</label>
@@ -501,12 +496,8 @@
                  </div>
             </div>
               <div class="mt-6 text-center flex-shrink-0 flex justify-center space-x-4">
-                <button onclick="window.location.reload()" class="secondary-button px-6 py-2">
-                    Try Again
-                </button>
-                <button id="download-pdf-button" class="primary-button px-6 py-2">
-                    Download Results PDF
-                </button>
+                <button onclick="window.location.reload()" class="secondary-button px-6 py-2">Try Again</button>
+                <button id="download-pdf-button" class="primary-button px-6 py-2">Download Results PDF</button>
             </div>
         </div>
 
@@ -520,7 +511,6 @@
                 <div id="navigator-grid" class="grid grid-cols-4 gap-3"> </div>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -531,36 +521,11 @@
             `A heritage steam train travels from Glenhaven to Redmoor, 42 km away. Because of track limits, its average speed is 28 mph. It departs at 09:17 am. Use 1 mile = 1.6 km.`,
             `A sports-drink powder states that 25 g of powder is needed per 600 mL of water. A coach wants to prepare 7.2 litres of the drink for a tournament, using exactly the recommended concentration.`
         ];
-
         const questions = [
-            {
-                passageIndex: 0, 
-                text: "How many New Zealand dollars, to the nearest dollar, does Lara receive after postage is deducted?",
-                options: ["NZ $80", "NZ $83", "NZ $84", "NZ $87", "NZ $90"],
-                correctAnswer: "B", 
-                explanation: "1. Convert refund to NZD: CAD 72 / 0.83 CAD/NZD = NZD 86.746...\n2. Subtract postal fee: NZD 86.746... - NZD 4.30 = NZD 82.446...\n3. Round to nearest dollar: NZD 82. The closest option provided is NZ $83 (Option B). It's possible the question implies rounding at a different stage or has a slight variation in expected calculation for the options."
-            },
-            {
-                passageIndex: 1, 
-                text: "What is the new temperature of the sample in degrees Celsius?",
-                options: ["-215°C", "-138°C", "-115°C", "-148°C", "-81°C"],
-                correctAnswer: "B",
-                explanation: "A temperature change in Kelvin (K) is equal in magnitude to a temperature change in Celsius (°C). So, the sample warms by 58°C.\nNew temperature = Starting temperature + Warming\nNew temperature = -196°C + 58°C = -138°C."
-            },
-            {
-                passageIndex: 2, 
-                text: "At what time will the train arrive at Redmoor?",
-                options: ["10:01 am", "10:07 am", "10:11 am", "10:15 am", "10:19 am"],
-                correctAnswer: "D", 
-                explanation: "1. Convert distance to miles: 42 km / 1.6 km/mile = 26.25 miles.\n2. Calculate travel time in hours: Time = Distance / Speed = 26.25 miles / 28 mph = 0.9375 hours.\n3. Convert travel time to minutes: 0.9375 hours * 60 minutes/hour = 56.25 minutes.\n4. Add travel time to departure time: 09:17 am + 56.25 minutes.\n   56.25 minutes = 56 minutes and (0.25 * 60) = 15 seconds.\n   09:17:00 + 00:56:15 = 10:13:15 am.\n   The closest option is 10:15 am (Option D)."
-            },
-            {
-                passageIndex: 3, 
-                text: "What is the minimum mass of powder required?",
-                options: ["250g", "275g", "300g", "320g", "430g"],
-                correctAnswer: "C",
-                explanation: "1. Convert total drink volume to mL: 7.2 litres * 1000 mL/litre = 7200 mL.\n2. Determine how many 600 mL portions are in 7200 mL: 7200 mL / 600 mL/portion = 12 portions.\n3. Calculate total powder needed: 12 portions * 25 g/portion = 300g."
-            }
+            { passageIndex: 0, text: "How many New Zealand dollars, to the nearest dollar, does Lara receive after postage is deducted?", options: ["NZ $80", "NZ $83", "NZ $84", "NZ $87", "NZ $90"], correctAnswer: "B", explanation: "1. Convert refund to NZD: CAD 72 / 0.83 CAD/NZD = NZD 86.746...\n2. Subtract postal fee: NZD 86.746... - NZD 4.30 = NZD 82.446...\n3. Round to nearest dollar: NZD 82. The closest option provided is NZ $83 (Option B). It's possible the question implies rounding at a different stage or has a slight variation in expected calculation for the options." },
+            { passageIndex: 1, text: "What is the new temperature of the sample in degrees Celsius?", options: ["-215°C", "-138°C", "-115°C", "-148°C", "-81°C"], correctAnswer: "B", explanation: "A temperature change in Kelvin (K) is equal in magnitude to a temperature change in Celsius (°C). So, the sample warms by 58°C.\nNew temperature = Starting temperature + Warming\nNew temperature = -196°C + 58°C = -138°C." },
+            { passageIndex: 2, text: "At what time will the train arrive at Redmoor?", options: ["10:01 am", "10:07 am", "10:11 am", "10:15 am", "10:19 am"], correctAnswer: "D", explanation: "1. Convert distance to miles: 42 km / 1.6 km/mile = 26.25 miles.\n2. Calculate travel time in hours: Time = Distance / Speed = 26.25 miles / 28 mph = 0.9375 hours.\n3. Convert travel time to minutes: 0.9375 hours * 60 minutes/hour = 56.25 minutes.\n4. Add travel time to departure time: 09:17 am + 56.25 minutes.\n   56.25 minutes = 56 minutes and (0.25 * 60) = 15 seconds.\n   09:17:00 + 00:56:15 = 10:13:15 am.\n   The closest option is 10:15 am (Option D)." },
+            { passageIndex: 3, text: "What is the minimum mass of powder required?", options: ["250g", "275g", "300g", "320g", "430g"], correctAnswer: "C", explanation: "1. Convert total drink volume to mL: 7.2 litres * 1000 mL/litre = 7200 mL.\n2. Determine how many 600 mL portions are in 7200 mL: 7200 mL / 600 mL/portion = 12 portions.\n3. Calculate total powder needed: 12 portions * 25 g/portion = 300g." }
         ];
 
         // --- State ---
@@ -568,17 +533,25 @@
         let userAnswers = new Array(questions.length).fill(null);
         let timerInterval;
         let timeLeft = 4 * 60; 
-        let examStartTime;
-        let examEndTime;
-        let userName = '';
-        let userGoal = '';
-        let userFocusArea = '';
+        let examStartTime; let examEndTime;
+        let userName = ''; let userGoal = ''; let userFocusArea = '';
         let isReviewingFromResults = false;
         let questionStartTime = null;
         let questionTimes = new Array(questions.length).fill(0);
         let flaggedQuestions = new Array(questions.length).fill(false);
         let isFilteringFlagged = false;
         let currentlyDisplayedPassageIndex = -1;
+
+        // --- Calculator State ---
+        let calcCurrentInput = '0';
+        let calcPreviousInput = '';
+        let calcOperator = null;
+        let calcMemory = 0;
+        let calcShouldResetDisplay = false; 
+        let calcMrcPressedOnce = false; 
+        let isDraggingCalculator = false;
+        let calculatorOffsetX, calculatorOffsetY;
+
 
         // --- Elements ---
         const appContainer = document.getElementById('app-container');
@@ -608,7 +581,7 @@
         const scoreEl = document.getElementById('score');
         const totalQuestionsResultsEl = document.getElementById('total-questions-results');
         const timeTakenEl = document.getElementById('time-taken');
-        const resultsDetailsGrid = document.getElementById('results-details-grid'); // Updated ID
+        const resultsDetailsGrid = document.getElementById('results-details-grid');
         const nameInput = document.getElementById('name');
         const goalInput = document.getElementById('goal');
         const focusAreaInput = document.getElementById('focus-area');
@@ -620,6 +593,13 @@
         const reflectionText = document.getElementById('reflection-text');
         const downloadPdfButton = document.getElementById('download-pdf-button');
         const focusRatingInput = document.getElementById('focus-rating');
+        const calculatorToggleButton = document.getElementById('calculator-toggle-button');
+        const calculatorUI = document.getElementById('calculator-ui');
+        const calcDisplay = document.getElementById('calc-display');
+        const calcButtons = document.querySelectorAll('.calc-button');
+        const closeCalculatorButton = document.getElementById('close-calculator-button');
+        const calculatorDragHeader = document.getElementById('calculator-drag-header');
+
 
         // --- Functions ---
         function startTimer() {
@@ -947,7 +927,7 @@
             appContainer.classList.add('flex', 'flex-col');
 
             let score = 0;
-            resultsDetailsGrid.innerHTML = ''; // Use the new grid container ID
+            resultsDetailsGrid.innerHTML = ''; 
 
             questions.forEach((qData, index) => {
                 const userAnswer = userAnswers[index];
@@ -958,11 +938,9 @@
                 const timeSpentMs = questionTimes[index] || 0;
                 const timeSpentSec = Math.round(timeSpentMs / 1000);
 
-                // Create wrapper for the box and its number
                 const summaryItem = document.createElement('div');
                 summaryItem.classList.add('result-summary-item');
 
-                // Create the colored box
                 const summaryBox = document.createElement('div');
                 summaryBox.classList.add('result-summary-box');
                 if (userAnswer === null || userAnswer === undefined) {
@@ -973,13 +951,11 @@
                 summaryBox.dataset.index = index;
                 summaryBox.title = `Click to review Question ${index + 1}`;
 
-                // Create span for time display inside the box
                 const timeDisplay = document.createElement('span');
                 timeDisplay.classList.add('time-display-in-box');
                 timeDisplay.textContent = `${timeSpentSec}s`;
                 summaryBox.appendChild(timeDisplay);
 
-                // Create div for question number label below the box
                 const numberLabel = document.createElement('div');
                 numberLabel.classList.add('question-number-label');
                 numberLabel.textContent = `Q${index + 1}`;
@@ -1071,6 +1047,251 @@
             });
             doc.save(`ucat_qr_results_${userName || 'user'}.pdf`);
         }
+        
+        // --- Calculator Functions ---
+        function updateCalcDisplay() {
+            // Ensure display doesn't overflow, show 'Error' if too long (simple approach)
+            if (calcCurrentInput.length > 12 && calcCurrentInput !== 'Error') { // Max 12 digits before 'Error'
+                calcDisplay.textContent = 'Error'; // Or some other indicator
+            } else {
+                 calcDisplay.textContent = calcCurrentInput;
+            }
+        }
+
+        function clearCalculator() {
+            calcCurrentInput = '0';
+            calcPreviousInput = '';
+            calcOperator = null;
+            calcShouldResetDisplay = false;
+            calcMrcPressedOnce = false; 
+            updateCalcDisplay();
+        }
+        
+        function inputDigit(digit) {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0'; // Clear error on new digit
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = digit;
+                calcShouldResetDisplay = false;
+            } else {
+                // Prevent excessively long numbers before decimal
+                if (calcCurrentInput.includes('.') && calcCurrentInput.split('.')[1].length >= 8) return; // Limit to 8 decimal places
+                if (!calcCurrentInput.includes('.') && calcCurrentInput.length >= 10 && calcCurrentInput !== '0') return; // Limit to 10 integer digits
+
+                calcCurrentInput = calcCurrentInput === '0' ? digit : calcCurrentInput + digit;
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false; 
+        }
+
+        function inputDecimal() {
+            if (calcCurrentInput === 'Error') calcCurrentInput = '0';
+            if (calcShouldResetDisplay) {
+                calcCurrentInput = '0.';
+                calcShouldResetDisplay = false;
+            } else if (!calcCurrentInput.includes('.')) {
+                calcCurrentInput += '.';
+            }
+            updateCalcDisplay();
+            calcMrcPressedOnce = false;
+        }
+
+        function handleOperator(nextOperator) {
+            if (calcCurrentInput === 'Error') return;
+            const inputValue = parseFloat(calcCurrentInput);
+            if (calcOperator && !calcShouldResetDisplay) { 
+                calculate();
+                if (calcCurrentInput === 'Error') return; // Stop if calculation resulted in error
+                calcPreviousInput = calcCurrentInput; 
+            } else {
+                calcPreviousInput = calcCurrentInput;
+            }
+            calcOperator = nextOperator;
+            calcShouldResetDisplay = true;
+            calcMrcPressedOnce = false;
+        }
+
+        function calculate() {
+            if (!calcOperator || calcPreviousInput === '' || calcCurrentInput === 'Error') return;
+            const prev = parseFloat(calcPreviousInput);
+            const current = parseFloat(calcCurrentInput);
+            if (isNaN(prev) || isNaN(current)) {
+                calcCurrentInput = 'Error'; // Should not happen if inputs are validated
+                updateCalcDisplay();
+                return;
+            }
+
+            let result = 0;
+            switch (calcOperator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': 
+                    if (current === 0) {
+                        result = 'Error';
+                    } else {
+                        result = prev / current;
+                    }
+                    break;
+                default: return;
+            }
+
+            if (result === 'Error') {
+                calcCurrentInput = 'Error';
+            } else {
+                // Format result: if it's a very small or large number, toExponential might be better
+                // For simplicity, using toPrecision and then parseFloat to remove trailing zeros
+                let resultStr = parseFloat(result.toPrecision(10)).toString(); // 10 significant figures
+                if (resultStr.includes('e')) { // Handle scientific notation if it occurs
+                    // Keep it simple, or implement more complex display logic
+                }
+                calcCurrentInput = resultStr;
+            }
+            calcOperator = null;
+            calcShouldResetDisplay = true; 
+            updateCalcDisplay();
+        }
+
+        function handleMemory(action) {
+            const currentValue = parseFloat(calcCurrentInput);
+            if (calcCurrentInput === 'Error' && action !== 'mrc') return;
+
+
+            switch (action) {
+                case 'm+':
+                    if (!isNaN(currentValue)) calcMemory += currentValue;
+                    break;
+                case 'm-':
+                    if (!isNaN(currentValue)) calcMemory -= currentValue;
+                    break;
+                case 'mrc':
+                    if (calcMrcPressedOnce) { 
+                        calcMemory = 0;
+                        calcMrcPressedOnce = false;
+                         // Optionally, could also clear display to 0 here
+                    } else { 
+                        calcCurrentInput = String(parseFloat(calcMemory.toPrecision(10))); // Show memory with precision
+                        calcMrcPressedOnce = true;
+                        calcShouldResetDisplay = true; 
+                    }
+                    break;
+            }
+            if (action !== 'mrc') { // For M+ and M-, display doesn't change immediately
+                calcShouldResetDisplay = true; // Next number input should overwrite current display
+                calcMrcPressedOnce = false; 
+            } else {
+                 updateCalcDisplay(); // For MRC, update display immediately
+            }
+        }
+
+        function handleSpecialFunction(func) {
+            if (calcCurrentInput === 'Error' && func !== 'clear') return;
+            const currentValue = parseFloat(calcCurrentInput);
+
+            switch (func) {
+                case 'sqrt':
+                    if (currentValue < 0 || isNaN(currentValue)) {
+                        calcCurrentInput = 'Error';
+                    } else {
+                        calcCurrentInput = String(parseFloat(Math.sqrt(currentValue).toPrecision(10)));
+                    }
+                    break;
+                case 'percent':
+                    if (isNaN(currentValue)) { calcCurrentInput = 'Error'; break; }
+                    if (calcPreviousInput !== '' && calcOperator) {
+                        const prev = parseFloat(calcPreviousInput);
+                        if (isNaN(prev)) { calcCurrentInput = 'Error'; break; }
+                        calcCurrentInput = String(parseFloat((prev * (currentValue / 100)).toPrecision(10)));
+                    } else { 
+                        calcCurrentInput = String(parseFloat((currentValue / 100).toPrecision(10)));
+                    }
+                    break;
+                case 'negate':
+                     if (calcCurrentInput !== '0' && !isNaN(currentValue)) { 
+                        calcCurrentInput = String(currentValue * -1);
+                    }
+                    break;
+                case 'backspace':
+                    if (calcCurrentInput === 'Error' || calcShouldResetDisplay) {
+                        calcCurrentInput = '0';
+                        calcShouldResetDisplay = false;
+                    } else if (calcCurrentInput.length > 1) {
+                        calcCurrentInput = calcCurrentInput.slice(0, -1);
+                    } else {
+                        calcCurrentInput = '0';
+                    }
+                    break;
+            }
+            updateCalcDisplay();
+            if (func !== 'backspace' && func !== 'negate') { 
+                calcShouldResetDisplay = true;
+            }
+            calcMrcPressedOnce = false;
+        }
+
+
+        function toggleCalculator() {
+            const isVisible = calculatorUI.classList.toggle('visible');
+            calculatorToggleButton.classList.toggle('active', isVisible);
+            if (isVisible) {
+                clearCalculator(); 
+            }
+        }
+        
+        // Draggable Calculator Logic
+        function makeDraggable(element, handle) {
+            let currentX, currentY;
+
+            handle.onmousedown = function(event) {
+                event.preventDefault();
+                isDraggingCalculator = true;
+                calculatorUI.style.cursor = 'grabbing';
+
+                // Get the initial mouse cursor position
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            };
+
+            function elementDrag(event) {
+                event.preventDefault();
+                if (!isDraggingCalculator) return;
+
+                // Calculate the new cursor position
+                const dx = currentX - event.clientX;
+                const dy = currentY - event.clientY;
+                currentX = event.clientX;
+                currentY = event.clientY;
+
+                // Set the element's new position
+                let newTop = element.offsetTop - dy;
+                let newLeft = element.offsetLeft - dx;
+
+                // Constrain within app-container (optional, can be complex)
+                const appRect = appContainer.getBoundingClientRect();
+                const calcRect = element.getBoundingClientRect();
+                
+                // Simple boundary check (relative to viewport for now, as appContainer might scroll)
+                // For more robust boundary, calculate relative to appContainer's scroll position
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + calcRect.width > window.innerWidth) newLeft = window.innerWidth - calcRect.width;
+                if (newTop + calcRect.height > window.innerHeight) newTop = window.innerHeight - calcRect.height;
+
+
+                element.style.top = newTop + "px";
+                element.style.left = newLeft + "px";
+            }
+
+            function closeDragElement() {
+                isDraggingCalculator = false;
+                calculatorUI.style.cursor = 'grab';
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
 
         // --- Event Listeners ---
         startButton.addEventListener('click', () => {
@@ -1097,49 +1318,73 @@
         prevButton.addEventListener('click', showPrevQuestion);
         endExamButton.addEventListener('click', endExamAndShowResults);
         endExamButtonFooter.addEventListener('click', handleEndExamFooterClick);
-        backToResultsButton.addEventListener('click', () => {
-            isReviewingFromResults = false;
-            showResultsScreen();
-        });
-        navigatorButton.addEventListener('click', () => {
-             recordTimeSpent(currentQuestionIndex);
-            updateNavigatorButtons();
-            navigatorModal.classList.remove('hidden');
-            navigatorModal.classList.add('flex');
-        });
-        closeModalButton.addEventListener('click', () => {
-             navigatorModal.classList.remove('flex');
-             navigatorModal.classList.add('hidden');
-             if (!isReviewingFromResults) questionStartTime = Date.now();
-        });
-        navigatorModal.addEventListener('click', (event) => {
-            if (event.target === navigatorModal) closeModalButton.click();
-        });
+        backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
+        navigatorButton.addEventListener('click', () => { recordTimeSpent(currentQuestionIndex); updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex'); });
+        closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
+        navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
         flagButton.addEventListener('click', toggleFlag);
-        filterFlaggedButton.addEventListener('click', () => {
-            isFilteringFlagged = !isFilteringFlagged;
-            showReviewScreen(isFilteringFlagged);
-        });
+        filterFlaggedButton.addEventListener('click', () => { isFilteringFlagged = !isFilteringFlagged; showReviewScreen(isFilteringFlagged); });
         downloadPdfButton.addEventListener('click', generatePDF);
+
+        calculatorToggleButton.addEventListener('click', toggleCalculator);
+        closeCalculatorButton.addEventListener('click', toggleCalculator);
+        makeDraggable(calculatorUI, calculatorDragHeader);
+
+
+        calcButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.dataset.calcValue;
+                const action = button.dataset.calcAction;
+
+                if (value !== undefined) { 
+                    if (value === '.') { inputDecimal(); } 
+                    else { inputDigit(value); }
+                } else if (action) { 
+                    if (['+', '-', '*', '/'].includes(action)) { handleOperator(action); } 
+                    else if (action === 'equals') { calculate(); } 
+                    else if (action === 'clear') { clearCalculator(); } 
+                    else if (['m+', 'm-', 'mrc'].includes(action)) { handleMemory(action); } 
+                    else if (['sqrt', 'percent', 'negate', 'backspace'].includes(action)) { handleSpecialFunction(action); }
+                }
+            });
+        });
 
         function handleKeyboardShortcuts(e) {
              const isExamVisible = !examScreen.classList.contains('hidden');
              const isModalVisible = navigatorModal.classList.contains('flex');
              const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
-             if (isModalVisible || isInputFocused) return;
-             if (!isExamVisible) return;
+             const isCalcVisible = calculatorUI.classList.contains('visible');
+
+             if (isCalcVisible && !isInputFocused) { 
+                if (e.key >= '0' && e.key <= '9') { e.preventDefault(); inputDigit(e.key); return; }
+                if (e.key === '.') { e.preventDefault(); inputDecimal(); return; }
+                if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') { e.preventDefault(); handleOperator(e.key); return; }
+                if (e.key === 'Enter' || e.key === '=') { e.preventDefault(); calculate(); return; }
+                if (e.key === 'Backspace') { e.preventDefault(); handleSpecialFunction('backspace'); return; }
+                if (e.key === 'Escape') { e.preventDefault(); toggleCalculator(); return; } 
+                if (e.key.toLowerCase() === 'p') { e.preventDefault(); handleMemory('m+'); return; }
+                if (e.key.toLowerCase() === 'm') { e.preventDefault(); handleMemory('m-'); return; }
+                if (e.key.toLowerCase() === 'c' && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); handleMemory('mrc'); return; } 
+                if (e.key.toLowerCase() === 'x') { e.preventDefault(); handleSpecialFunction('sqrt'); return; }
+             }
+             
+             if (isModalVisible || isInputFocused) return; 
+             if (!isExamVisible) return; 
+             
              const key = e.key.toLowerCase();
-             const altOrOption = e.altKey;
-             const code = e.code.toLowerCase();
+             const altOrOption = e.altKey || e.metaKey; 
+             const code = e.code.toLowerCase(); 
+
              if (altOrOption) {
-                 switch (code) {
+                 switch (code) { 
                      case 'keyn': e.preventDefault(); if (!nextButton.disabled) nextButton.click(); return;
                      case 'keyp': e.preventDefault(); if (!prevButton.disabled) prevButton.click(); return;
                      case 'keyf': e.preventDefault(); if (!isReviewingFromResults && !flagButton.disabled) flagButton.click(); return;
-                     default: return;
+                     case 'keyc': e.preventDefault(); toggleCalculator(); return; 
+                     default: return; 
                  }
-             } else {
-                 if (['a', 'b', 'c', 'd', 'e'].includes(key) && !isReviewingFromResults) {
+             } else { 
+                 if (['a', 'b', 'c', 'd', 'e'].includes(key) && !isReviewingFromResults && !isCalcVisible) { 
                      e.preventDefault();
                      const optionIndex = ['a', 'b', 'c', 'd', 'e'].indexOf(key);
                      const optionValue = ['A', 'B', 'C', 'D', 'E'][optionIndex];
@@ -1155,6 +1400,7 @@
 
         // --- Initial Load ---
         showSetupScreen();
+        updateCalcDisplay(); 
     </script>
 </body>
 </html>
