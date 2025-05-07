@@ -152,7 +152,7 @@
             padding: 1rem;
             border: 1px solid #e5e7eb;
             border-radius: 0.375rem;
-            background-color: #f9fafb; 
+            background-color: #fff;
             height: 100%; 
         }
         .question-column {
@@ -161,7 +161,7 @@
              padding: 1rem;
              border: 1px solid #e5e7eb;
              border-radius: 0.375rem;
-             background-color: #f9fafb; 
+             background-color: #fff;
              height: 100%; 
              position: relative; 
         }
@@ -424,7 +424,8 @@
                 <button class="close-calc-btn" id="close-calculator-button">&times;</button>
             </div>
             <div class="calculator-decorative-text">TEXAS INSTRUMENTS TI-108</div>
-            <div id="calc-display-container">
+            <div id="calc-display-container" style="position: relative;">
+                <span id="calc-memory-indicator" style="position: absolute; left: 6px; top: 4px; color: #2D3748; font-weight: bold; font-size: 1.1rem; display: none;">M</span>
                 <div id="calc-display">0</div>
             </div>
             <div class="calc-buttons-grid">
@@ -451,11 +452,12 @@
                 <button class="calc-button calc-button-num" data-calc-value="1">1</button>
                 <button class="calc-button calc-button-num" data-calc-value="2">2</button>
                 <button class="calc-button calc-button-num" data-calc-value="3">3</button>
-                <button class="calc-button calc-button-red equals" data-calc-action="equals">=</button>
+                <button class="calc-button calc-button-red equals" data-calc-action="equals" style="grid-row: span 2;">=</button>
 
                 <button class="calc-button calc-button-red" data-calc-action="clear">ON/C</button>
                 <button class="calc-button calc-button-num" data-calc-value="0">0</button>
                 <button class="calc-button calc-button-num" data-calc-value=".">.</button>
+                <!-- The = button above spans this cell -->
             </div>
         </div>
 
@@ -524,7 +526,7 @@
         const questions = [
             { passageIndex: 0, text: "How many New Zealand dollars, to the nearest dollar, does Lara receive after postage is deducted?", options: ["NZ $80", "NZ $83", "NZ $84", "NZ $87", "NZ $90"], correctAnswer: "B", explanation: "1. Convert refund to NZD: CAD 72 / 0.83 CAD/NZD = NZD 86.746...\n2. Subtract postal fee: NZD 86.746... - NZD 4.30 = NZD 82.446...\n3. Round to nearest dollar: NZD 82. The closest option provided is NZ $83 (Option B). It's possible the question implies rounding at a different stage or has a slight variation in expected calculation for the options." },
             { passageIndex: 1, text: "What is the new temperature of the sample in degrees Celsius?", options: ["-215°C", "-138°C", "-115°C", "-148°C", "-81°C"], correctAnswer: "B", explanation: "A temperature change in Kelvin (K) is equal in magnitude to a temperature change in Celsius (°C). So, the sample warms by 58°C.\nNew temperature = Starting temperature + Warming\nNew temperature = -196°C + 58°C = -138°C." },
-            { passageIndex: 2, text: "At what time will the train arrive at Redmoor?", options: ["10:01 am", "10:07 am", "10:11 am", "10:15 am", "10:19 am"], correctAnswer: "D", explanation: "1. Convert distance to miles: 42 km / 1.6 km/mile = 26.25 miles.\n2. Calculate travel time in hours: Time = Distance / Speed = 26.25 miles / 28 mph = 0.9375 hours.\n3. Convert travel time to minutes: 0.9375 hours * 60 minutes/hour = 56.25 minutes.\n4. Add travel time to departure time: 09:17 am + 56.25 minutes.\n   56.25 minutes = 56 minutes and (0.25 * 60) = 15 seconds.\n   09:17:00 + 00:56:15 = 10:13:15 am.\n   The closest option is 10:15 am (Option D)." },
+            { passageIndex: 2, text: "At what time will the train arrive at Redmoor?", options: ["10:01 am", "10:07 am", "10:11 am", "10:13 am", "10:19 am"], correctAnswer: "D", explanation: "1. Convert distance to miles: 42 km / 1.6 km/mile = 26.25 miles.\n2. Calculate travel time in hours: Time = Distance / Speed = 26.25 miles / 28 mph = 0.9375 hours.\n3. Convert travel time to minutes: 0.9375 hours * 60 minutes/hour = 56.25 minutes.\n4. Add travel time to departure time: 09:17 am + 56.25 minutes.\n   56.25 minutes = 56 minutes and (0.25 * 60) = 15 seconds.\n   09:17:00 + 00:56:15 = 10:13:15 am.\n   The closest option is 10:15 am (Option D)." },
             { passageIndex: 3, text: "What is the minimum mass of powder required?", options: ["250g", "275g", "300g", "320g", "430g"], correctAnswer: "C", explanation: "1. Convert total drink volume to mL: 7.2 litres * 1000 mL/litre = 7200 mL.\n2. Determine how many 600 mL portions are in 7200 mL: 7200 mL / 600 mL/portion = 12 portions.\n3. Calculate total powder needed: 12 portions * 25 g/portion = 300g." }
         ];
 
@@ -1056,6 +1058,13 @@
             } else {
                  calcDisplay.textContent = calcCurrentInput;
             }
+            // Show/hide memory indicator
+            const memIndicator = document.getElementById('calc-memory-indicator');
+            if (calcMemory !== 0) {
+                memIndicator.style.display = 'block';
+            } else {
+                memIndicator.style.display = 'none';
+            }
         }
 
         function clearCalculator() {
@@ -1155,19 +1164,20 @@
             const currentValue = parseFloat(calcCurrentInput);
             if (calcCurrentInput === 'Error' && action !== 'mrc') return;
 
-
             switch (action) {
                 case 'm+':
                     if (!isNaN(currentValue)) calcMemory += currentValue;
+                    updateCalcDisplay();
                     break;
                 case 'm-':
                     if (!isNaN(currentValue)) calcMemory -= currentValue;
+                    updateCalcDisplay();
                     break;
                 case 'mrc':
                     if (calcMrcPressedOnce) { 
                         calcMemory = 0;
                         calcMrcPressedOnce = false;
-                         // Optionally, could also clear display to 0 here
+                        // Optionally, could also clear display to 0 here
                     } else { 
                         calcCurrentInput = String(parseFloat(calcMemory.toPrecision(10))); // Show memory with precision
                         calcMrcPressedOnce = true;
@@ -1179,7 +1189,7 @@
                 calcShouldResetDisplay = true; // Next number input should overwrite current display
                 calcMrcPressedOnce = false; 
             } else {
-                 updateCalcDisplay(); // For MRC, update display immediately
+                updateCalcDisplay(); // For MRC, update display immediately
             }
         }
 
