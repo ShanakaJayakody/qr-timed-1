@@ -353,7 +353,7 @@
         <div id="setup-screen" class="p-6 md:p-8 flex flex-col justify-center items-center h-full">
              <div class="text-center mb-6">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                     alt="MedwithPurpose Logo" class="mx-auto h-26 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                     alt="MedwithPurpose Logo" class="mx-auto h-5 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
                 <h1 class="text-2xl md:text-3xl font-bold text-blue-600">UCAT Quantitative Reasoning Practice</h1>
                 <p class="text-gray-600 mt-2">Prepare for the UCAT QR section.</p>
                  <p class="text-sm text-gray-500 mt-4">
@@ -379,9 +379,9 @@
             </div>
         </div>
 
-        <div id="exam-screen" class="hidden flex flex-col h-full">
+        <div id="practice-session-screen" class="hidden flex flex-col h-full">
             <div class="header-bar">
-                <span id="exam-title" class="font-semibold">Quantitative Reasoning</span>
+                <span id="practice-session-title" class="font-semibold">Quantitative Reasoning</span>
                 <div class="flex items-center space-x-4">
                     <div id="timer" class="text-base px-3 py-1 rounded-md">04:00</div>
                     <span class="text-sm">Question <span id="question-number-info">1</span> of 4</span>
@@ -409,7 +409,7 @@
 
             <div class="footer-bar">
                  <button id="back-to-results-button" class="hidden mr-auto">← Back to Results</button>
-                 <button id="end-exam-button-footer">End Exam</button>
+                 <button id="end-practice-session-button-footer">End Practice Session</button>
                  <div class="flex items-center space-x-2 ml-auto">
                      <button id="prev-button" disabled>← Previous (Alt+P)</button>
                      <button id="navigator-button">Navigator</button>
@@ -470,15 +470,15 @@
              <p class="text-center text-gray-600 mb-6">Click on a question number to review it. Green indicates answered, Yellow border indicates flagged.</p>
             <div id="review-grid" class="grid grid-cols-4 gap-3 mb-6 w-full max-w-xs sm:max-w-sm md:max-w-md"></div>
             <div class="mt-auto pt-6">
-                <button id="end-exam-button" class="danger-button text-lg px-8 py-3">End Exam & See Results</button>
+                <button id="end-practice-session-button" class="danger-button text-lg px-8 py-3">End Practice Session & See Results</button>
             </div>
         </div>
 
         <div id="results-screen" class="hidden p-6 md:p-8 flex flex-col h-full">
              <div class="text-center mb-6 flex-shrink-0">
                 <img src="https://ik.imagekit.io/mwp/MWP%20Color%20no%20background.png?updatedAt=1745982959141"
-                     alt="MedwithPurpose Logo" class="mx-auto h-21 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
-                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Exam Results</h2>
+                     alt="MedwithPurpose Logo" class="mx-auto h-4 w-auto mb-4" onerror="this.style.display='none'; this.onerror=null;">
+                 <h2 class="text-2xl md:text-3xl font-bold text-blue-600">Practice Session Results</h2>
              </div>
             <div class="bg-blue-50 p-4 rounded-lg mb-6 text-center flex-shrink-0">
                  <p class="text-lg font-semibold">Your Score: <span id="score" class="text-blue-700">0</span> / <span id="total-questions-results">4</span></p>
@@ -535,7 +535,7 @@
         let userAnswers = new Array(questions.length).fill(null);
         let timerInterval;
         let timeLeft = 4 * 60; 
-        let examStartTime; let examEndTime;
+        let practiceSessionStartTime; let practiceSessionEndTime;
         let userName = ''; let userGoal = ''; let userFocusArea = '';
         let isReviewingFromResults = false;
         let questionStartTime = null;
@@ -558,7 +558,7 @@
         // --- Elements ---
         const appContainer = document.getElementById('app-container');
         const setupScreen = document.getElementById('setup-screen');
-        const examScreen = document.getElementById('exam-screen');
+        const practiceSessionScreen = document.getElementById('practice-session-screen');
         const reviewScreen = document.getElementById('review-screen');
         const resultsScreen = document.getElementById('results-screen');
         const navigatorModal = document.getElementById('navigator-modal');
@@ -567,8 +567,8 @@
         const nextButton = document.getElementById('next-button');
         const navigatorButton = document.getElementById('navigator-button');
         const closeModalButton = document.getElementById('close-modal-button');
-        const endExamButton = document.getElementById('end-exam-button');
-        const endExamButtonFooter = document.getElementById('end-exam-button-footer');
+        const endPracticeSessionButton = document.getElementById('end-practice-session-button');
+        const endPracticeSessionButtonFooter = document.getElementById('end-practice-session-button-footer');
         const backToResultsButton = document.getElementById('back-to-results-button');
         const flagButton = document.getElementById('flag-button');
         const passageNumberEl = document.getElementById('passage-number');
@@ -587,7 +587,7 @@
         const nameInput = document.getElementById('name');
         const goalInput = document.getElementById('goal');
         const focusAreaInput = document.getElementById('focus-area');
-        const examTitleEl = document.getElementById('exam-title');
+        const practiceSessionTitleEl = document.getElementById('practice-session-title');
         const filterFlaggedButton = document.getElementById('filter-flagged-button');
         const setupQuestionCountEl = document.getElementById('setup-question-count');
         const setupTimeLimitEl = document.getElementById('setup-time-limit');
@@ -605,7 +605,7 @@
 
         // --- Functions ---
         function startTimer() {
-            examStartTime = new Date();
+            practiceSessionStartTime = new Date();
             clearInterval(timerInterval);
             timerEl.textContent = formatTimeSeconds(timeLeft);
             timerEl.classList.remove('text-gray-300');
@@ -614,14 +614,14 @@
                 timeLeft--;
                 timerEl.textContent = formatTimeSeconds(timeLeft);
                 if (timeLeft <= 0) {
-                    endExamAndShowResults();
+                    endPracticeSessionAndShowResults();
                 }
             }, 1000);
         }
 
         function stopTimer() {
             clearInterval(timerInterval);
-            examEndTime = examEndTime || new Date();
+            practiceSessionEndTime = practiceSessionEndTime || new Date();
             timerEl.classList.remove('text-white', 'bg-opacity-20', 'bg-white');
             timerEl.classList.add('text-gray-300');
         }
@@ -746,15 +746,15 @@
             updateFlagButtonAppearance();
             if (reviewMode) {
                 backToResultsButton.classList.remove('hidden');
-                endExamButtonFooter.classList.add('hidden');
-                examTitleEl.textContent = "Reviewing Question";
+                endPracticeSessionButtonFooter.classList.add('hidden');
+                practiceSessionTitleEl.textContent = "Reviewing Question";
                 prevButton.disabled = index === 0;
                 navigatorButton.disabled = false;
                 flagButton.disabled = true;
             } else {
                 backToResultsButton.classList.add('hidden');
-                endExamButtonFooter.classList.remove('hidden');
-                examTitleEl.textContent = "Quantitative Reasoning";
+                endPracticeSessionButtonFooter.classList.remove('hidden');
+                practiceSessionTitleEl.textContent = "Quantitative Reasoning";
                 navigatorButton.disabled = false;
                 flagButton.disabled = false;
                 prevButton.disabled = index === 0;
@@ -813,7 +813,7 @@
 
         function showSetupScreen() {
             setupScreen.classList.remove('hidden');
-            examScreen.classList.add('hidden');
+            practiceSessionScreen.classList.add('hidden');
             reviewScreen.classList.add('hidden');
             resultsScreen.classList.add('hidden');
             appContainer.classList.remove('flex', 'flex-col');
@@ -827,10 +827,10 @@
             }
         }
 
-        function showExamScreen() {
+        function showPracticeSessionScreen() {
             setupScreen.classList.add('hidden');
-            examScreen.classList.remove('hidden');
-            examScreen.classList.add('flex');
+            practiceSessionScreen.classList.remove('hidden');
+            practiceSessionScreen.classList.add('flex');
             reviewScreen.classList.add('hidden');
             resultsScreen.classList.add('hidden');
             appContainer.classList.add('flex', 'flex-col');
@@ -840,7 +840,7 @@
         function showReviewScreen(filterFlagged = false) {
             recordTimeSpent(currentQuestionIndex);
             stopTimer();
-            examScreen.classList.add('hidden');
+            practiceSessionScreen.classList.add('hidden');
             reviewScreen.classList.remove('hidden');
             reviewScreen.classList.add('flex');
             resultsScreen.classList.add('hidden');
@@ -865,7 +865,7 @@
                 button.onclick = () => {
                     reviewScreen.classList.add('hidden');
                     reviewScreen.classList.remove('flex');
-                    showExamScreen();
+                    showPracticeSessionScreen();
                     loadQuestion(index);
                 };
                 reviewGrid.appendChild(button);
@@ -916,11 +916,11 @@
          }
 
         function showResultsScreen() {
-            examEndTime = examEndTime || new Date();
+            practiceSessionEndTime = practiceSessionEndTime || new Date();
             recordTimeSpent(currentQuestionIndex);
             stopTimer();
 
-            examScreen.classList.add('hidden');
+            practiceSessionScreen.classList.add('hidden');
             reviewScreen.classList.add('hidden');
             reviewScreen.classList.remove('flex');
             resultsScreen.classList.remove('hidden');
@@ -973,7 +973,7 @@
 
             scoreEl.textContent = score;
             totalQuestionsResultsEl.textContent = questions.length;
-            const timeDiff = examEndTime - examStartTime;
+            const timeDiff = practiceSessionEndTime - practiceSessionStartTime;
             timeTakenEl.textContent = formatTimeDifference(timeDiff);
         }
 
@@ -981,15 +981,15 @@
         function revisitQuestionFromResults(index) {
             resultsScreen.classList.add('hidden');
             resultsScreen.classList.remove('flex');
-            showExamScreen();
+            showPracticeSessionScreen();
             loadQuestion(index, true);
         }
 
-        function endExamAndShowResults() {
+        function endPracticeSessionAndShowResults() {
             stopTimer();
             showResultsScreen();
         }
-         function handleEndExamFooterClick() {
+         function handleEndPracticeSessionFooterClick() {
              recordTimeSpent(currentQuestionIndex);
              stopTimer();
              showReviewScreen();
@@ -1317,8 +1317,8 @@
             isReviewingFromResults = false;
             isFilteringFlagged = false;
             currentlyDisplayedPassageIndex = -1;
-            examEndTime = null;
-            showExamScreen();
+            practiceSessionEndTime = null;
+            showPracticeSessionScreen();
             startTimer();
             loadQuestion(0);
             populateNavigator();
@@ -1326,8 +1326,8 @@
 
         nextButton.addEventListener('click', showNextQuestion);
         prevButton.addEventListener('click', showPrevQuestion);
-        endExamButton.addEventListener('click', endExamAndShowResults);
-        endExamButtonFooter.addEventListener('click', handleEndExamFooterClick);
+        endPracticeSessionButton.addEventListener('click', endPracticeSessionAndShowResults);
+        endPracticeSessionButtonFooter.addEventListener('click', handleEndPracticeSessionFooterClick);
         backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
         navigatorButton.addEventListener('click', () => { recordTimeSpent(currentQuestionIndex); updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex'); });
         closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
@@ -1360,7 +1360,7 @@
         });
 
         function handleKeyboardShortcuts(e) {
-             const isExamVisible = !examScreen.classList.contains('hidden');
+             const isPracticeSessionVisible = !practiceSessionScreen.classList.contains('hidden');
              const isModalVisible = navigatorModal.classList.contains('flex');
              const isInputFocused = document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA');
              const isCalcVisible = calculatorUI.classList.contains('visible');
@@ -1379,7 +1379,7 @@
              }
              
              if (isModalVisible || isInputFocused) return; 
-             if (!isExamVisible) return; 
+             if (!isPracticeSessionVisible) return; 
              
              const key = e.key.toLowerCase();
              const altOrOption = e.altKey || e.metaKey; 
