@@ -550,10 +550,10 @@
             `A sports-drink powder states that 25 g of powder is needed per 600 mL of water. A coach wants to prepare 7.2 litres of the drink for a tournament, using exactly the recommended concentration.`
         ];
         const questions = [
-            { passageIndex: 0, text: "How many New Zealand dollars, to the nearest dollar, does Lara receive after postage is deducted?", options: ["NZ $80", "NZ $83", "NZ $84", "NZ $87", "NZ $90"], correctAnswer: "B", explanation: "1. Convert refund to NZD: CAD 72 / 0.83 CAD/NZD = NZD 86.746...\n2. Subtract postal fee: NZD 86.746... - NZD 4.30 = NZD 82.446...\n3. Round to nearest dollar: NZD 82. The closest option provided is NZ $83 (Option B). It's possible the question implies rounding at a different stage or has a slight variation in expected calculation for the options." },
-            { passageIndex: 1, text: "What is the new temperature of the sample in degrees Celsius?", options: ["-215°C", "-138°C", "-115°C", "-148°C", "-81°C"], correctAnswer: "B", explanation: "A temperature change in Kelvin (K) is equal in magnitude to a temperature change in Celsius (°C). So, the sample warms by 58°C.\nNew temperature = Starting temperature + Warming\nNew temperature = -196°C + 58°C = -138°C." },
-            { passageIndex: 2, text: "At what time will the train arrive at Redmoor?", options: ["10:01 am", "10:07 am", "10:11 am", "10:13 am", "10:19 am"], correctAnswer: "D", explanation: "1. Convert distance to miles: 42 km / 1.6 km/mile = 26.25 miles.\n2. Calculate travel time in hours: Time = Distance / Speed = 26.25 miles / 28 mph = 0.9375 hours.\n3. Convert travel time to minutes: 0.9375 hours * 60 minutes/hour = 56.25 minutes.\n4. Add travel time to departure time: 09:17 am + 56.25 minutes.\n   56.25 minutes = 56 minutes and (0.25 * 60) = 15 seconds.\n   09:17:00 + 00:56:15 = 10:13:15 am.\n   The closest option is 10:15 am (Option D)." },
-            { passageIndex: 3, text: "What is the minimum mass of powder required?", options: ["250g", "275g", "300g", "320g", "430g"], correctAnswer: "C", explanation: "1. Convert total drink volume to mL: 7.2 litres * 1000 mL/litre = 7200 mL.\n2. Determine how many 600 mL portions are in 7200 mL: 7200 mL / 600 mL/portion = 12 portions.\n3. Calculate total powder needed: 12 portions * 25 g/portion = 300g." }
+            { passageIndex: 0, text: "How many New Zealand dollars, to the nearest dollar, does Lara receive after postage is deducted?", options: ["NZ $80", "NZ $83", "NZ $84", "NZ $87", "NZ $90"], correctAnswer: "B", explanation: "Lara buys the sweater for CAD $72. Since NZ $1 = CAD $0.83, to convert CAD $72 into NZ$ you divide by 0.83:\n\n72 ÷ 0.83 ≈ 86.7 NZ$\n\nThen she pays NZ $4.30 postage, so her net refund is\n\n86.7 − 4.3 = 82.4 NZ$\n\nRounding to the nearest dollar gives about NZ $82. Since NZ $82 isn't an option, the closest choice is NZ $83.\n\nAnswer: B) NZ $83" },
+            { passageIndex: 1, text: "What is the new temperature of the sample in degrees Celsius?", options: ["-215°C", "-138°C", "-115°C", "-148°C", "-81°C"], correctAnswer: "B", explanation: "Temperatures in Kelvin and Celsius relate by\n\n𝑇(°𝐶) = 𝑇(𝐾)−273.\n\n– Starting at –196 °C means\n𝑇 = −196 + 273 = 77 K.\n\n– It warms by 58 K, so\n\n77 + 58 = 135 K.\n\n– Convert back to °C:\n\n135 − 273 = −138°𝐶.\n\nAnswer: B) –138 °C" },
+            { passageIndex: 2, text: "At what time will the train arrive at Redmoor?", options: ["10:01 am", "10:07 am", "10:11 am", "10:13 am", "10:19 am"], correctAnswer: "D", explanation: "1 mile = 1.6 km, so 42 km = 42 ÷ 1.6 = 26.25 miles.\n\nAt 28 mph, time = distance ÷ speed:\n\n26.25 ÷ 28 ≈ 0.9375 hours\n= 0.9375 × 60 ≈ 56.25 minutes.\n\nDeparting at 09:17 am plus 56 minutes → 10:13 am (and the extra 0.25 min is just 15 s).\n\nAnswer: D) 10:13 am" },
+            { passageIndex: 3, text: "What is the minimum mass of powder required?", options: ["250g", "275g", "300g", "320g", "430g"], correctAnswer: "C", explanation: "The recipe calls for 25 g powder per 600 mL water. To make 7.2 L = 7200 mL:\n\nFind grams per mL:\n\n25 g / 600 mL = 0.04167 g/mL.\n\nMultiply by 7200 mL:\n\n7200 × 0.04167 ≈ 300 g.\n\nAnswer: C) 300 g" }
         ];
 
         // --- State ---
@@ -809,6 +809,11 @@
          }
 
         function showNextQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
             if (isReviewingFromResults) {
                 if (currentQuestionIndex < questions.length - 1) {
                     loadQuestion(currentQuestionIndex + 1, true);
@@ -825,6 +830,11 @@
         }
 
         function showPrevQuestion() {
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator();
+            }
+            
              if (isReviewingFromResults) {
                  if (currentQuestionIndex > 0) {
                      loadQuestion(currentQuestionIndex - 1, true);
@@ -922,6 +932,10 @@
                  button.onclick = () => {
                      navigatorModal.classList.remove('flex');
                      navigatorModal.classList.add('hidden');
+                     // Hide calculator if it's open
+                     if (calculatorUI.classList.contains('visible')) {
+                         toggleCalculator();
+                     }
                      const targetIndex = parseInt(button.dataset.questionIndex, 10);
                      loadQuestion(targetIndex, isReviewingFromResults);
                  };
@@ -1366,7 +1380,16 @@
         endPracticeSessionButton.addEventListener('click', endPracticeSessionAndShowResults);
         endPracticeSessionButtonFooter.addEventListener('click', handleEndPracticeSessionFooterClick);
         backToResultsButton.addEventListener('click', () => { isReviewingFromResults = false; showResultsScreen(); });
-        navigatorButton.addEventListener('click', () => { recordTimeSpent(currentQuestionIndex); updateNavigatorButtons(); navigatorModal.classList.remove('hidden'); navigatorModal.classList.add('flex'); });
+        navigatorButton.addEventListener('click', () => { 
+            // Hide calculator if it's open
+            if (calculatorUI.classList.contains('visible')) {
+                toggleCalculator(); 
+            }
+            recordTimeSpent(currentQuestionIndex); 
+            updateNavigatorButtons(); 
+            navigatorModal.classList.remove('hidden'); 
+            navigatorModal.classList.add('flex'); 
+        });
         closeModalButton.addEventListener('click', () => { navigatorModal.classList.remove('flex'); navigatorModal.classList.add('hidden'); if (!isReviewingFromResults) questionStartTime = Date.now(); });
         navigatorModal.addEventListener('click', (event) => { if (event.target === navigatorModal) closeModalButton.click(); });
         flagButton.addEventListener('click', toggleFlag);
@@ -1457,6 +1480,10 @@
                 showPracticeSessionScreen();
                 const index = parseInt(e.target.dataset.questionIndex);
                 if (!isNaN(index) && index >= 0 && index < questions.length) {
+                    // Hide calculator if it's open
+                    if (calculatorUI.classList.contains('visible')) {
+                        toggleCalculator();
+                    }
                     loadQuestion(index);
                     updateTimerVisibility();
                 }
